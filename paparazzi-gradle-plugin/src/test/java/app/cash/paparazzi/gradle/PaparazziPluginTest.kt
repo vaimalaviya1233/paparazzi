@@ -110,6 +110,15 @@ class PaparazziPluginTest {
   }
 
   @Test
+  fun lottie() {
+    val fixtureRoot = File("src/test/projects/lottie")
+
+    gradleRunner
+      .withArguments("testDebug", "--stacktrace")
+      .runFixture(fixtureRoot) { build() }
+  }
+
+  @Test
   fun interceptViewEditMode() {
     val fixtureRoot = File("src/test/projects/edit-mode-intercept")
 
