@@ -20,6 +20,7 @@ android {
 
 dependencies {
   implementation libs.composeUi.material
+  implementation libs.androidx.appcompat
 
   testImplementation libs.testParameterInjector
 }
