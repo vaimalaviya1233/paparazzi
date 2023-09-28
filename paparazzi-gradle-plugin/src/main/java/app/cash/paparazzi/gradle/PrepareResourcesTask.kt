@@ -19,6 +19,7 @@ import app.cash.paparazzi.gradle.utils.joinFiles
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
@@ -52,8 +53,8 @@ abstract class PrepareResourcesTask : DefaultTask() {
   abstract val moduleResourceDirs: ConfigurableFileCollection
 
   @get:InputFiles
-  @get:PathSensitive(PathSensitivity.NONE)
-  abstract val aarExplodedDirs: ConfigurableFileCollection
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val aarExplodedDirs: ListProperty<String>
 
   @get:InputFiles
   @get:PathSensitive(PathSensitivity.NONE)

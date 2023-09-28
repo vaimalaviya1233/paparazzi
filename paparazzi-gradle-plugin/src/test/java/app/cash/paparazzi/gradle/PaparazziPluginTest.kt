@@ -858,6 +858,51 @@ class PaparazziPluginTest {
   }
 
   @Test
+  fun verifyResourcesUpdatedWhenDependencyChanges() {
+    val fixtureRoot = File("src/test/projects/verify-resources-updated")
+
+    System.setProperty("isFirstRun", "true")
+
+    val firstRun = gradleRunner
+      .withArguments(":preparePaparazziDebugResources",
+        "--build-cache",
+        "--stacktrace",
+        "-Dorg.gradle.caching.debug=true"
+      )
+      .forwardOutput()
+      .runFixture(fixtureRoot) { build() }
+
+    with(firstRun.task(":preparePaparazziDebugResources")) {
+      assertThat(this).isNotNull()
+      assertThat(this!!.outcome).isNotEqualTo(FROM_CACHE)
+    }
+
+    var resourcesFile = File(fixtureRoot, "build/intermediates/paparazzi/debug/resources.txt")
+    var resourceFileContents = resourcesFile.readLines()
+    assertThat(resourceFileContents[8]).matches("^caches/transforms-3/[0-9a-f]{32}/transformed/external1/res\$")
+
+    fixtureRoot.resolve("build").deleteRecursively()
+
+    System.setProperty("isFirstRun", "false")
+
+    val secondRun = gradleRunner
+      .withArguments(":preparePaparazziDebugResources", "--build-cache", "--stacktrace",
+        "-Dorg.gradle.caching.debug=true"
+      )
+      .forwardOutput()
+      .runFixture(fixtureRoot) { build() }
+
+    with(secondRun.task(":preparePaparazziDebugResources")) {
+      assertThat(this).isNotNull()
+      assertThat(this!!.outcome).isEqualTo(FROM_CACHE)
+    }
+
+    resourcesFile = File(fixtureRoot, "build/intermediates/paparazzi/debug/resources.txt")
+    resourceFileContents = resourcesFile.readLines()
+    assertThat(resourceFileContents[8]).matches("^caches/transforms-3/[0-9a-f]{32}/transformed/external2/res\$")
+  }
+
+  @Test
   fun verifyTargetSdkIsSameAsCompileSdk() {
     val fixtureRoot = File("src/test/projects/verify-resources-java")
 

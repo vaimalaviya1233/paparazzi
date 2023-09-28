@@ -246,7 +246,7 @@ class PaparazziPlugin : Plugin<Project> {
           .withPathSensitivity(PathSensitivity.NONE)
         test.inputs.files(aarExplodedDirs)
           .withPropertyName("paparazzi.aarExplodedDirs")
-          .withPathSensitivity(PathSensitivity.NONE)
+          .withPathSensitivity(PathSensitivity.RELATIVE)
         test.inputs.files(localAssetDirs)
           .withPropertyName("paparazzi.localAssetDirs")
           .withPathSensitivity(PathSensitivity.NONE)
